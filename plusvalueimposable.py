@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from io import BytesIO
 
 # --- Configuration de la page ---
 st.set_page_config(page_title="Crypto & DeFi — Calcul Plus-value", page_icon="🪙", layout="wide")
@@ -67,12 +66,9 @@ PV = st.sidebar.number_input("Montant vendu / Prix de vente (PV)", value=5000.0,
 rate = st.sidebar.slider("Taux d'imposition (%)", min_value=0.0, max_value=100.0, value=30.0)
 
 st.sidebar.markdown("---")
-st.sidebar.header("Options de visualisation")
 show_history = st.sidebar.checkbox("Afficher évolution portefeuille (simulée)", True)
-upload = st.sidebar.file_uploader("Importer votre allocation (CSV) — colonnes: asset, qty, price", type=["csv"]) 
 
 # --- Calculs ---
-# Formule : plus-value = PV * (1 - PA / V)
 if V == 0:
     st.error("La valeur totale du portefeuille (V) doit être > 0")
     st.stop()
@@ -144,21 +140,14 @@ with colA:
 
 with colB:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.subheader("Allocation (exemple / import)")
-    if upload is not None:
-        try:
-            alloc = pd.read_csv(upload)
-            st.write(alloc)
-        except Exception as e:
-            st.error("Erreur lecture CSV: assurez-vous des colonnes asset, qty, price")
-    else:
-        demo = pd.DataFrame({
-            'asset': ['BTC', 'ETH', 'SOL', 'USDC'],
-            'qty': [0.12, 1.8, 10, 2000],
-            'price': [30000, 1800, 30, 1]
-        })
-        demo['value'] = demo['qty'] * demo['price']
-        st.table(demo)
+    st.subheader("Allocation (exemple)")
+    demo = pd.DataFrame({
+        'asset': ['BTC', 'ETH', 'SOL', 'USDC'],
+        'qty': [0.12, 1.8, 10, 2000],
+        'price': [30000, 1800, 30, 1]
+    })
+    demo['value'] = demo['qty'] * demo['price']
+    st.table(demo)
     st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Evolution simulée du portefeuille ---
@@ -166,12 +155,11 @@ if show_history:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.subheader("Évolution simulée du portefeuille")
 
-    # Créons une courbe linéaire reliant PA -> V et ajoutons du bruit pour l'esthétique
     days = pd.date_range(end=pd.Timestamp.today(), periods=60)
     start_val = PA
     end_val = V
     vals = np.linspace(start_val, end_val, len(days))
-    vals = vals * (1 + 0.02 * np.sin(np.linspace(0, 6.28, len(days))))  # petit oscillation
+    vals = vals * (1 + 0.02 * np.sin(np.linspace(0, 6.28, len(days))))
     df_hist = pd.DataFrame({'date': days, 'value': vals})
 
     fig = go.Figure()
@@ -180,26 +168,6 @@ if show_history:
     fig.update_layout(yaxis_title='€', xaxis_title='Date', template='plotly_dark')
     st.plotly_chart(fig, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
-
-# --- Exporter résultats ---
-st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.subheader("Exporter les résultats")
-export_df = pd.DataFrame({
-    'PA': [PA], 'V': [V], 'PV': [PV], 'Plus-value': [plus_value], 'Impôt estimé': [impot], 'Taux impôt (%)': [rate]
-})
-
-@st.cache_data
-def to_excel(df):
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name='résultat')
-    writer.save()
-    processed_data = output.getvalue()
-    return processed_data
-
-excel_bytes = to_excel(export_df)
-st.download_button(label='Télécharger résultats (.xlsx)', data=excel_bytes, file_name='plusvalue_resultats.xlsx')
-st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Footer ---
 st.markdown("<div style='height:12px'></div>", unsafe_allow_html=True)
