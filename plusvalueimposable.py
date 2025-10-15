@@ -113,42 +113,27 @@ with st.expander("Voir la formule et l'explication"):
     """)
 
 # --- Visualisations ---
-colA, colB = st.columns([2,1])
+st.markdown("<div class='card'>", unsafe_allow_html=True)
+st.subheader("Détail de la vente & simulation")
+st.write("Répartition du montant vendu : coût imputé vs gain")
 
-with colA:
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.subheader("Détail de la vente & simulation")
-    st.write("Répartition du montant vendu : coût imputé vs gain")
+cost_imputed = PA * (PV / V)
+df_pie = pd.DataFrame({
+    'part': ['Coût imputé', 'Plus-value'],
+    'value': [cost_imputed, max(plus_value, 0.0)]
+})
+fig_pie = px.pie(df_pie, names='part', values='value', hole=0.6,
+                 title='Imputation du prix de vente')
+fig_pie.update_traces(textposition='inside', textinfo='percent+label')
+st.plotly_chart(fig_pie, use_container_width=True)
 
-    cost_imputed = PA * (PV / V)
-    df_pie = pd.DataFrame({
-        'part': ['Coût imputé', 'Plus-value'],
-        'value': [cost_imputed, max(plus_value, 0.0)]
-    })
-    fig_pie = px.pie(df_pie, names='part', values='value', hole=0.6,
-                     title='Imputation du prix de vente')
-    fig_pie.update_traces(textposition='inside', textinfo='percent+label')
-    st.plotly_chart(fig_pie, use_container_width=True)
-
-    st.markdown("---")
-    st.write("**Détails numériques**")
-    st.write(pd.DataFrame({
-        'Libellé': ['Montant vendu (PV)', 'Coût imputé', 'Plus-value', 'Taux portefeuille (1-PA/V)', 'Impôt estimé'],
-        'Valeur': [f"€ {PV:,.2f}", f"€ {cost_imputed:,.2f}", f"€ {plus_value:,.2f}", f"{pv_ratio*100:.2f} %", f"€ {impot:,.2f}"]
-    }))
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with colB:
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.subheader("Allocation (exemple)")
-    demo = pd.DataFrame({
-        'asset': ['BTC', 'ETH', 'SOL', 'USDC'],
-        'qty': [0.12, 1.8, 10, 2000],
-        'price': [30000, 1800, 30, 1]
-    })
-    demo['value'] = demo['qty'] * demo['price']
-    st.table(demo)
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("---")
+st.write("**Détails numériques**")
+st.write(pd.DataFrame({
+    'Libellé': ['Montant vendu (PV)', 'Coût imputé', 'Plus-value', 'Taux portefeuille (1-PA/V)', 'Impôt estimé'],
+    'Valeur': [f"€ {PV:,.2f}", f"€ {cost_imputed:,.2f}", f"€ {plus_value:,.2f}", f"{pv_ratio*100:.2f} %", f"€ {impot:,.2f}"]
+}))
+st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Evolution simulée du portefeuille ---
 if show_history:
