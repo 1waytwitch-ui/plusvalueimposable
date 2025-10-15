@@ -93,7 +93,6 @@ if valeur_portefeuille > 0 and prix_vente > 0:
 st.divider()
 st.markdown("""
 > ⚠️ **Disclaimer :** Ce calculateur est fourni à titre informatif uniquement.  
-> Il ne constitue pas un conseil fiscal. Consulte un professionnel pour une déclaration officielle.
+> Il ne constitue pas un conseil sur la fiscalité. Consultez un professionnel pour une déclaration officielle.
 
-👨‍💻 Outil crypto-friendly développé pour la communauté Web3.
 """)
