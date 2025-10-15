@@ -81,22 +81,18 @@ impot = plus_value * (rate / 100.0) if plus_value > 0 else 0.0
 k1, k2, k3, k4 = st.columns(4)
 with k1:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown("<div class='small muted'>Prix de vente</div>")
     st.markdown(f"<div class='kpi'>€ {PV:,.2f}</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 with k2:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown("<div class='small muted'>Prix total d'acquisition</div>")
     st.markdown(f"<div class='kpi'>€ {PA:,.2f}</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 with k3:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown("<div class='small muted'>Plus-value (imposable)</div>")
     st.markdown(f"<div class='kpi accent'>€ {plus_value:,.2f}</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 with k4:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown("<div class='small muted'>Impôt estimé</div>")
     st.markdown(f"<div class='kpi accent-2'>€ {impot:,.2f}</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
