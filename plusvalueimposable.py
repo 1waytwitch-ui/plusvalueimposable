@@ -36,23 +36,23 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --------- TITRE & DESCRIPTION ----------
-st.markdown("## 🪙 Calculateur de Plus-Value Crypto / DeFi")
-st.markdown("**Estime ta plus-value imposable et ton impôt sur les plus-values en crypto.**")
+st.markdown("## Calculateur de Plus-Value Crypto imposable")
+st.markdown("**Estimer la plus-value imposable et l'impôt sur les plus-values en crypto.**")
 
 st.divider()
 
 # --------- FORMULE EXPLICATIVE ----------
-with st.expander("📘 Voir la formule de calcul utilisée"):
+with st.expander("Voir la formule de calcul utilisée"):
     st.markdown("""
-    **🧮 Formule utilisée pour le calcul de la plus-value imposable :**
+    **Formule utilisée pour le calcul de la plus-value imposable :**
 
     _La plus-value imposable est calculée en proportion de la valeur totale du portefeuille._
 
-    ### 🧾 Formule expliquée :
+    ### Formule expliquée :
 
     > **Plus-value imposable** = Prix de vente − (Prix total d'acquisition × (Prix de vente ÷ Valeur totale du portefeuille avant la vente))
 
-    ### 🧮 Formule mathématique :
+    ### Formule mathématique :
 
     $$
     \text{Plus-value} = \text{Prix de vente} - \left( \text{Prix d'acquisition total} \times \frac{\text{Prix de vente}}{\text{Valeur totale du portefeuille}} \right)
@@ -60,15 +60,15 @@ with st.expander("📘 Voir la formule de calcul utilisée"):
     """, unsafe_allow_html=True)
 
 # --------- SAISIE DES DONNÉES UTILISATEUR ----------
-st.subheader("🔢 Paramètres d'entrée")
+st.subheader("Paramètres d'entrée")
 
 col1, col2 = st.columns(2)
 with col1:
-    prix_vente = st.number_input("💰 Prix de vente (€)", min_value=0.0, step=100.0, format="%.2f")
-    prix_acquisition_total = st.number_input("📦 Prix total d'acquisition (€)", min_value=0.0, step=100.0, format="%.2f")
+    prix_vente = st.number_input("Prix de vente (€)", min_value=0.0, step=100.0, format="%.2f")
+    prix_acquisition_total = st.number_input("Prix total d'acquisition (€)", min_value=0.0, step=100.0, format="%.2f")
 with col2:
-    valeur_portefeuille = st.number_input("📊 Valeur totale du portefeuille avant vente (€)", min_value=0.01, step=100.0, format="%.2f")
-    taux_flat_tax = st.slider("🧾 Taux de flat tax (%)", min_value=0.0, max_value=50.0, value=30.0, step=0.1)
+    valeur_portefeuille = st.number_input("Valeur totale du portefeuille avant vente (€)", min_value=0.01, step=100.0, format="%.2f")
+    taux_flat_tax = st.slider("Taux de flat tax (%)", min_value=0.0, max_value=50.0, value=30.0, step=0.1)
 
 # --------- CALCUL ---------
 if valeur_portefeuille > 0 and prix_vente > 0:
@@ -79,15 +79,15 @@ if valeur_portefeuille > 0 and prix_vente > 0:
 
     # --------- AFFICHAGE DES RÉSULTATS ---------
     st.divider()
-    st.subheader("📄 Résultats")
+    st.subheader("Résultats")
 
-    st.write(f"**🧮 Coût d'acquisition proportionnel :** `{cout_acquisition_proportionnel:.2f} €`")
-    st.write(f"**📈 Plus-value imposable :** `{plus_value:.2f} €`")
+    st.write(f"**Coût d'acquisition proportionnel :** `{cout_acquisition_proportionnel:.2f} €`")
+    st.write(f"**Plus-value imposable :** `{plus_value:.2f} €`")
 
     if plus_value > 0:
-        st.write(f"**💸 Impôt estimé ({taux_flat_tax:.1f}%) :** `{impot:.2f} €`")
+        st.write(f"**Impôt estimé ({taux_flat_tax:.1f}%) :** `{impot:.2f} €`")
     else:
-        st.write("✅ Aucune plus-value imposable (ou moins-value).")
+        st.write("Aucune plus-value imposable (ou moins-value).")
 
 # --------- FOOTER ---------
 st.divider()
